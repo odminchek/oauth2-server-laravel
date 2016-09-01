@@ -3,26 +3,26 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace LucaDegasperi\OAuth2Server;
+namespace Odminchek\OAuth2Server;
 
 use League\OAuth2\Server\AuthorizationServer as Issuer;
 use League\OAuth2\Server\Exception\AccessDeniedException;
 use League\OAuth2\Server\ResourceServer as Checker;
 use League\OAuth2\Server\TokenType\TokenTypeInterface;
 use League\OAuth2\Server\Util\RedirectUri;
-use LucaDegasperi\OAuth2Server\Exceptions\NoActiveAccessTokenException;
+use Odminchek\OAuth2Server\Exceptions\NoActiveAccessTokenException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This is the authorizer class.
  *
- * @author Luca Degasperi <packages@lucadegasperi.com>
+ * @author Sergey Tulaev <odminchek@yandex.ru>
  */
 class Authorizer
 {
@@ -92,7 +92,7 @@ class Authorizer
      *
      * If the session does not have an active access token, an exception will be thrown.
      *
-     * @throws \LucaDegasperi\OAuth2Server\Exceptions\NoActiveAccessTokenException
+     * @throws \Odminchek\OAuth2Server\Exceptions\NoActiveAccessTokenException
      *
      * @return \League\OAuth2\Server\Entity\AccessTokenEntity
      */

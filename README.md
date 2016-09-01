@@ -6,12 +6,12 @@
 
 [OAuth 2.0](http://tools.ietf.org/wg/oauth/draft-ietf-oauth-v2/) authorization server and resource server for the Laravel and Lumen frameworks. Standard compliant thanks to the amazing work by [The League of Extraordinary Packages](http://www.thephpleague.com) OAuth 2.0 authorization server and resource server.
 
-[![Latest Version](http://img.shields.io/github/release/lucadegasperi/oauth2-server-laravel.svg?style=flat-square)](https://github.com/lucadegasperi/oauth2-server-laravel/releases)
+[![Latest Version](http://img.shields.io/github/release/odminchek/oauth2-server-laravel.svg?style=flat-square)](https://github.com/odminchek/oauth2-server-laravel/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/lucadegasperi/oauth2-server-laravel/master.svg?style=flat-square)](https://travis-ci.org/lucadegasperi/oauth2-server-laravel)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/lucadegasperi/oauth2-server-laravel/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/lucadegasperi/oauth2-server-laravel/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/lucadegasperi/oauth2-server-laravel/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/lucadegasperi/oauth2-server-laravel)
-[![Total Downloads](https://img.shields.io/packagist/dt/lucadegasperi/oauth2-server-laravel.svg?style=flat-square)](https://packagist.org/packages/lucadegasperi/oauth2-server-laravel)
+[![Build Status](https://img.shields.io/travis/odminchek/oauth2-server-laravel/master.svg?style=flat-square)](https://travis-ci.org/odminchek/oauth2-server-laravel)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/odminchek/oauth2-server-laravel/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/odminchek/oauth2-server-laravel/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/odminchek/oauth2-server-laravel/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/odminchek/oauth2-server-laravel)
+[![Total Downloads](https://img.shields.io/packagist/dt/odminchek/oauth2-server-laravel.svg?style=flat-square)](https://packagist.org/packages/odminchek/oauth2-server-laravel)
 
 > **Note:** This package assumes you have a good-enough knowledge of the principles behind the [OAuth 2.0 authorization specification](http://tools.ietf.org/html/rfc6749).
 
@@ -32,7 +32,7 @@ This package features an [extensive documentation](docs#readme) to help you gett
 
 ## Contributing
 
-Bugs and feature request are tracked on [GitHub](https://github.com/lucadegasperi/oauth2-server-laravel/issues). Please read our [contribution guidelines](CONTRIBUTING.md) before opening a new issue or submitting a new pull request.
+Bugs and feature request are tracked on [GitHub](https://github.com/odminchek/oauth2-server-laravel/issues). Please read our [contribution guidelines](CONTRIBUTING.md) before opening a new issue or submitting a new pull request.
 
 ## Credits
 

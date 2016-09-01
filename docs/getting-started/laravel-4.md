@@ -3,7 +3,7 @@
 Composer is the recommended way to install this package. Add the following line to your `composer.json` file:
 
 ```json
-"lucadegasperi/oauth2-server-laravel": "^3.0"
+"odminchek/oauth2-server-laravel": "^3.0"
 ```
 
 Then run `composer update` to get the package.
@@ -12,13 +12,13 @@ Then run `composer update` to get the package.
 
 Once composer has installed the package add this line of code to the `providers` array located in your `app/config/app.php` file:
 ```php
-'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
-'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
+'Odminchek\OAuth2Server\Storage\FluentStorageServiceProvider',
+'Odminchek\OAuth2Server\OAuth2ServerServiceProvider',
 ```
 
 And this lines to the `aliases` array:
 ```php
-'Authorizer' => 'LucaDegasperi\OAuth2Server\Facades\AuthorizerFacade',
+'Authorizer' => 'Odminchek\OAuth2Server\Facades\AuthorizerFacade',
 ```
 
 ## Configuration Publishing
@@ -26,10 +26,10 @@ And this lines to the `aliases` array:
 In order to customize the behavior of this package, a configuration file to publish is provided to you.
 
 ```bash
-php artisan config:publish lucadegasperi/oauth2-server-laravel
+php artisan config:publish odminchek/oauth2-server-laravel
 ```
 
-Afterwards you can edit the file `app/config/packages/lucadegasperi/oauth2-server-laravel/oauth2.php` to suit your needs. A description of the configuration fields is [described here](https://github.com/lucadegasperi/oauth2-server-laravel/wiki/Configuration-Options).
+Afterwards you can edit the file `app/config/packages/odminchek/oauth2-server-laravel/oauth2.php` to suit your needs. A description of the configuration fields is [described here](https://github.com/odminchek/oauth2-server-laravel/wiki/Configuration-Options).
 
 ## Migrations
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +11,7 @@
 
 use Behat\Behat\Exception\PendingException;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use LucaDegasperi\OAuth2Server\Tests\Database\Seeders\OAuth2DatabaseSeeder;
+use Odminchek\OAuth2Server\Tests\Database\Seeders\OAuth2DatabaseSeeder;
 use Orchestra\Testbench\BehatFeatureContext;
 use PHPUnit_Framework_Assert as PHPUnit;
 
@@ -107,7 +107,7 @@ class FeatureContext extends BehatFeatureContext
     protected function getPackageAliases()
     {
         return [
-            'Authorizer' => 'LucaDegasperi\OAuth2Server\Facades\AuthorizerFacade',
+            'Authorizer' => 'Odminchek\OAuth2Server\Facades\AuthorizerFacade',
         ];
     }
 
@@ -119,8 +119,8 @@ class FeatureContext extends BehatFeatureContext
     protected function getPackageProviders()
     {
         return [
-            'LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider',
-            'LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider',
+            'Odminchek\OAuth2Server\Storage\FluentStorageServiceProvider',
+            'Odminchek\OAuth2Server\OAuth2ServerServiceProvider',
         ];
     }
 

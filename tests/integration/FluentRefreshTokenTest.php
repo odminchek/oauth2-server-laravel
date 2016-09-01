@@ -3,13 +3,13 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-use LucaDegasperi\OAuth2Server\Storage\FluentRefreshToken;
+use Odminchek\OAuth2Server\Storage\FluentRefreshToken;
 use Mockery as m;
 
 class FluentRefreshTokenTest extends AbstractDBTestCase

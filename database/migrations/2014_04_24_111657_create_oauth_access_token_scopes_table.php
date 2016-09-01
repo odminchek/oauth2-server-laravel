@@ -3,7 +3,7 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * This is the create oauth access token scopes table migration class.
  *
- * @author Luca Degasperi <packages@lucadegasperi.com>
+ * @author Sergey Tulaev <odminchek@yandex.ru>
  */
 class CreateOauthAccessTokenScopesTable extends Migration
 {

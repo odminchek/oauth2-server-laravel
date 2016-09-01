@@ -3,22 +3,22 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace LucaDegasperi\OAuth2Server\Facades;
+namespace Odminchek\OAuth2Server\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * This is the authorizer facade class.
  *
- * @see \LucaDegasperi\OAuth2Server\Authorizer
+ * @see \Odminchek\OAuth2Server\Authorizer
  *
- * @author Luca Degasperi <packages@lucadegasperi.com>
+ * @author Sergey Tulaev <odminchek@yandex.ru>
  */
 class Authorizer extends Facade
 {

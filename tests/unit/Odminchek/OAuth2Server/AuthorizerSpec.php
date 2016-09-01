@@ -3,13 +3,13 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace unit\LucaDegasperi\OAuth2Server;
+namespace unit\Odminchek\OAuth2Server;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Entity\AccessTokenEntity;
@@ -18,7 +18,7 @@ use League\OAuth2\Server\Entity\SessionEntity;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Util\RedirectUri;
-use LucaDegasperi\OAuth2Server\Exceptions\NoActiveAccessTokenException;
+use Odminchek\OAuth2Server\Exceptions\NoActiveAccessTokenException;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,7 +31,7 @@ class AuthorizerSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType('LucaDegasperi\OAuth2Server\Authorizer');
+        $this->shouldHaveType('Odminchek\OAuth2Server\Authorizer');
     }
 
     public function it_issues_an_access_token(AuthorizationServer $issuer)

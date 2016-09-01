@@ -3,25 +3,25 @@
 /*
  * This file is part of OAuth 2.0 Laravel.
  *
- * (c) Luca Degasperi <packages@lucadegasperi.com>
+ * (c) Sergey Tulaev <odminchek@yandex.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace unit\LucaDegasperi\OAuth2Server\Middleware;
+namespace unit\Odminchek\OAuth2Server\Middleware;
 
 use Illuminate\Http\Request;
 use League\OAuth2\Server\Exception\AccessDeniedException;
-use LucaDegasperi\OAuth2Server\Authorizer;
+use Odminchek\OAuth2Server\Authorizer;
 use PhpSpec\ObjectBehavior;
 
 /**
- * This is the oauth client middleware spec class.
+ * This is the oauth user middleware spec class.
  *
  * @author Vincent Klaiber <hello@vinkla.com>
  */
-class OAuthClientOwnerMiddlewareSpec extends ObjectBehavior
+class OAuthUserOwnerMiddlewareSpec extends ObjectBehavior
 {
     private $next = null;
 
@@ -39,12 +39,12 @@ class OAuthClientOwnerMiddlewareSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType('LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware');
+        $this->shouldHaveType('Odminchek\OAuth2Server\Middleware\OAuthUserOwnerMiddleware');
     }
 
     public function it_passes_if_resource_owners_are_allowed(Request $request, Authorizer $authorizer)
     {
-        $authorizer->getResourceOwnerType()->willReturn('client')->shouldBeCalled();
+        $authorizer->getResourceOwnerType()->willReturn('user')->shouldBeCalled();
         $authorizer->setRequest($request)->shouldBeCalled();
 
         $this->shouldThrow(new MiddlewareException('Called execution of $next'))
@@ -53,7 +53,7 @@ class OAuthClientOwnerMiddlewareSpec extends ObjectBehavior
 
     public function it_blocks_if_resource_owners_are_not_allowed(Request $request, Authorizer $authorizer)
     {
-        $authorizer->getResourceOwnerType()->willReturn('user')->shouldBeCalled();
+        $authorizer->getResourceOwnerType()->willReturn('client')->shouldBeCalled();
         $authorizer->setRequest($request)->shouldBeCalled();
 
         $this->shouldThrow(new AccessDeniedException())
