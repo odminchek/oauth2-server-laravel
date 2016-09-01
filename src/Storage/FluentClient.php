@@ -17,6 +17,11 @@ use League\OAuth2\Server\Entity\ClientEntity;
 use League\OAuth2\Server\Entity\SessionEntity;
 use League\OAuth2\Server\Storage\ClientInterface;
 
+// mongo
+// use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use App\OauthClientsModel;
+use App\OauthClientEndpointsModel;
+
 /**
  * This is the fluent client class.
  *
@@ -75,52 +80,106 @@ class FluentClient extends AbstractFluentAdapter implements ClientInterface
      */
     public function get($clientId, $clientSecret = null, $redirectUri = null, $grantType = null)
     {
-        $query = null;
+        // using MongoDB
 
-        if (!is_null($redirectUri) && is_null($clientSecret)) {
-            $query = $this->getConnection()->table('oauth_clients')
-                   ->select(
-                       'oauth_clients.id as id',
-                       'oauth_clients.secret as secret',
-                       'oauth_client_endpoints.redirect_uri as redirect_uri',
-                       'oauth_clients.name as name')
-                   ->join('oauth_client_endpoints', 'oauth_clients.id', '=', 'oauth_client_endpoints.client_id')
-                   ->where('oauth_clients.id', $clientId)
-                   ->where('oauth_client_endpoints.redirect_uri', $redirectUri);
-        } elseif (!is_null($clientSecret) && is_null($redirectUri)) {
-            $query = $this->getConnection()->table('oauth_clients')
-                   ->select(
-                       'oauth_clients.id as id',
-                       'oauth_clients.secret as secret',
-                       'oauth_clients.name as name')
-                   ->where('oauth_clients.id', $clientId)
-                   ->where('oauth_clients.secret', $clientSecret);
-        } elseif (!is_null($clientSecret) && !is_null($redirectUri)) {
-            $query = $this->getConnection()->table('oauth_clients')
-                   ->select(
-                       'oauth_clients.id as id',
-                       'oauth_clients.secret as secret',
-                       'oauth_client_endpoints.redirect_uri as redirect_uri',
-                       'oauth_clients.name as name')
-                   ->join('oauth_client_endpoints', 'oauth_clients.id', '=', 'oauth_client_endpoints.client_id')
-                   ->where('oauth_clients.id', $clientId)
-                   ->where('oauth_clients.secret', $clientSecret)
-                   ->where('oauth_client_endpoints.redirect_uri', $redirectUri);
-        }
+        if( !is_null( $redirectUri ) && is_null( $clientSecret ) ):
+            
+            if( !$oauthClient = OauthClientsModel::where( 'id', '=', $clientId )->first() ):
+                return;
+            endif;
 
-        if ($this->limitClientsToGrants === true && !is_null($grantType)) {
-            $query = $query->join('oauth_client_grants', 'oauth_clients.id', '=', 'oauth_client_grants.client_id')
-                   ->join('oauth_grants', 'oauth_grants.id', '=', 'oauth_client_grants.grant_id')
-                   ->where('oauth_grants.id', $grantType);
-        }
+            if( !$oauthClientEndpoint = OauthClientEndpointsModel::where( 'id', '=', $clientId )->first() 
+                OR $oauthClientEndpoint->redirectUri !== $redirectUri
+                ):
+                return;
+            endif;
 
-        $result = $query->first();
+            $result = $oauthClient;
+            $result->redirect_uri = $oauthClientEndpoint->redirect_uri;
+            
+        elseif( !is_null( $clientSecret ) && is_null( $redirectUri ) ):
 
-        if (is_null($result)) {
-            return;
-        }
+            if( !$oauthClient = OauthClientsModel::where( 'id', '=', $clientId )->first() 
+                OR $oauthClient->secret !== $clientSecret
+                ):
+                return;
+            endif;
 
-        return $this->hydrateEntity($result);
+            $result = $oauthClient;
+
+        elseif( !is_null( $clientSecret ) && !is_null( $redirectUri ) ):
+            
+            if( !$oauthClient = OauthClientsModel::where( 'id', '=', $clientId )->first() 
+                OR $oauthClient->secret !== $clientSecret
+                ):
+                return;
+            endif;
+
+            if( !$oauthClientEndpoint = OauthClientEndpointsModel::where( 'id', '=', $clientId )->first() 
+                OR $oauthClientEndpoint->redirectUri !== $redirectUri
+                ):
+                return;
+            endif;
+
+            $result = $oauthClient;
+            $result->redirect_uri = $oauthClientEndpoint->redirect_uri;
+
+        endif;
+
+        if ( $this->limitClientsToGrants === TRUE && !is_null( $grantType ) ):
+            /* пока просто оставим так. ближе к делу разберёмся с правами */
+        endif;
+
+        return $this->hydrateEntity( $result );
+
+        // start of native code
+
+        // $query = null;
+
+        // if (!is_null($redirectUri) && is_null($clientSecret)) {
+        //     $query = $this->getConnection()->table('oauth_clients')
+        //            ->select(
+        //                'oauth_clients.id as id',
+        //                'oauth_clients.secret as secret',
+        //                'oauth_client_endpoints.redirect_uri as redirect_uri',
+        //                'oauth_clients.name as name')
+        //            ->join('oauth_client_endpoints', 'oauth_clients.id', '=', 'oauth_client_endpoints.client_id')
+        //            ->where('oauth_clients.id', $clientId)
+        //            ->where('oauth_client_endpoints.redirect_uri', $redirectUri);
+        // } elseif (!is_null($clientSecret) && is_null($redirectUri)) {
+        //     $query = $this->getConnection()->table('oauth_clients')
+        //            ->select(
+        //                'oauth_clients.id as id',
+        //                'oauth_clients.secret as secret',
+        //                'oauth_clients.name as name')
+        //            ->where('oauth_clients.id', $clientId)
+        //            ->where('oauth_clients.secret', $clientSecret);
+        // } elseif (!is_null($clientSecret) && !is_null($redirectUri)) {
+        //     $query = $this->getConnection()->table('oauth_clients')
+        //            ->select(
+        //                'oauth_clients.id as id',
+        //                'oauth_clients.secret as secret',
+        //                'oauth_client_endpoints.redirect_uri as redirect_uri',
+        //                'oauth_clients.name as name')
+        //            ->join('oauth_client_endpoints', 'oauth_clients.id', '=', 'oauth_client_endpoints.client_id')
+        //            ->where('oauth_clients.id', $clientId)
+        //            ->where('oauth_clients.secret', $clientSecret)
+        //            ->where('oauth_client_endpoints.redirect_uri', $redirectUri);
+        // }
+
+        // if ($this->limitClientsToGrants === true && !is_null($grantType)) {
+        //     $query = $query->join('oauth_client_grants', 'oauth_clients.id', '=', 'oauth_client_grants.client_id')
+        //            ->join('oauth_grants', 'oauth_grants.id', '=', 'oauth_client_grants.grant_id')
+        //            ->where('oauth_grants.id', $grantType);
+        // }
+
+        // $result = $query->first();
+
+        // if (is_null($result)) {
+        //     return;
+        // }
+
+        // return $this->hydrateEntity($result);
     }
 
     /**
