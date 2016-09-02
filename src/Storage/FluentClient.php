@@ -17,8 +17,6 @@ use League\OAuth2\Server\Entity\ClientEntity;
 use League\OAuth2\Server\Entity\SessionEntity;
 use League\OAuth2\Server\Storage\ClientInterface;
 
-// mongo
-// use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use App\OauthClientsModel;
 use App\OauthClientEndpointsModel;
 
@@ -128,6 +126,10 @@ class FluentClient extends AbstractFluentAdapter implements ClientInterface
 
         if ( $this->limitClientsToGrants === TRUE && !is_null( $grantType ) ):
             /* пока просто оставим так. ближе к делу разберёмся с правами */
+            /*
+                нам надо понять какие у нас будут права доступа
+                и в соответствии с этим их брать из базы и возвращать
+            */
         endif;
 
         return $this->hydrateEntity( $result );
@@ -216,15 +218,33 @@ class FluentClient extends AbstractFluentAdapter implements ClientInterface
      *
      * @return string
      */
-    public function create($name, $id, $secret)
+    public function create( $name, $id, $secret )
     {
-        return $this->getConnection()->table('oauth_clients')->insertGetId([
-            'id' => $id,
-            'name' => $name,
-            'secret' => $secret,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        // using Mongo
+
+        $oauthClient = new OauthClientsModel;
+        $oauthClient->id = $id;
+        $oauthClient->name = $name;
+        $oauthClient->secret = $secret;
+        $oauthClient->created_at = Carbon::now();
+        $oauthClient->updated_at = Carbon::now();
+
+        if( !$oauthClient->save() 
+            OR !isset( $oauthClient->_id )
+            ):
+            return FALSE;
+        endif;
+
+        return $oauthClient->_id;
+
+
+        // return $this->getConnection()->table('oauth_clients')->insertGetId([
+        //     'id' => $id,
+        //     'name' => $name,
+        //     'secret' => $secret,
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ]);
     }
 
     /**
