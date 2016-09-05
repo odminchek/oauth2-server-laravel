@@ -16,6 +16,8 @@ use League\OAuth2\Server\Entity\AccessTokenEntity;
 use League\OAuth2\Server\Entity\ScopeEntity;
 use League\OAuth2\Server\Storage\AccessTokenInterface;
 
+use App\OauthAccessTokensModel;
+
 /**
  * This is the fluent access token class.
  *
@@ -30,19 +32,33 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      *
      * @return null|AbstractTokenEntity
      */
-    public function get($token)
+    public function get( $token )
     {
-        $result = $this->getConnection()->table('oauth_access_tokens')
-                ->where('oauth_access_tokens.id', $token)
-                ->first();
+        // mongo
+        if( !$accessToken = OauthAccessTokensModel::where( 'id', '=', $token )->first() 
+            OR !isset( $accessToken->id )
+            OR !isset( $accessToken->expire_time )
+            ):
+            return FALSE;
+        endif;
 
-        if (is_null($result)) {
-            return;
-        }
+        $result = new AccessTokenEntity( $this->getServer() );
+        $result->setId( $accessToken->id );
+        $result->setExpireTime( $accessToken->expire_time );
 
-        return (new AccessTokenEntity($this->getServer()))
-               ->setId($result->id)
-               ->setExpireTime((int) $result->expire_time);
+        return $result;
+
+        // $result = $this->getConnection()->table('oauth_access_tokens')
+        //         ->where('oauth_access_tokens.id', $token)
+        //         ->first();
+
+        // if ( is_null( $result ) ) {
+        //     return;
+        // }
+
+        // return ( new AccessTokenEntity( $this->getServer() ) )
+        //        ->setId( $result->id )
+        //        ->setExpireTime( (int)$result->expire_time );
     }
 
     /*
@@ -100,19 +116,38 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      *
      * @return \League\OAuth2\Server\Entity\AccessTokenEntity
      */
-    public function create($token, $expireTime, $sessionId)
+    public function create( $token, $expireTime, $sessionId )
     {
-        $this->getConnection()->table('oauth_access_tokens')->insert([
-            'id' => $token,
-            'expire_time' => $expireTime,
-            'session_id' => $sessionId,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        // mongo
+        $accessToken = new OauthAccessTokensModel;
 
-        return (new AccessTokenEntity($this->getServer()))
-               ->setId($token)
-               ->setExpireTime((int) $expireTime);
+        $accessToken->id = $token;
+        $accessToken->expire_time = $expireTime;
+        $accessToken->session_id = $sessionId;
+        $accessToken->created_at = Carbon::now();
+        $accessToken->updated_at = Carbon::now();
+
+        if( !$accessToken->save() ):
+            return FALSE;
+        endif;
+
+        $result = new AccessTokenEntity( $this->getServer() );
+        $result->setId( $accessToken->id );
+        $result->setExpireTime( $accessToken->expire_time );
+
+        return $result;
+
+        // $this->getConnection()->table('oauth_access_tokens')->insert([
+        //     'id' => $token,
+        //     'expire_time' => $expireTime,
+        //     'session_id' => $sessionId,
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ]);
+
+        // return (new AccessTokenEntity($this->getServer()))
+        //        ->setId($token)
+        //        ->setExpireTime((int) $expireTime);
     }
 
     /**
@@ -123,7 +158,7 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      *
      * @return void
      */
-    public function associateScope(AccessTokenEntity $token, ScopeEntity $scope)
+    public function associateScope( AccessTokenEntity $token, ScopeEntity $scope )
     {
         $this->getConnection()->table('oauth_access_token_scopes')->insert([
             'access_token_id' => $token->getId(),
@@ -140,10 +175,21 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      *
      * @return void
      */
-    public function delete(AccessTokenEntity $token)
+    public function delete( AccessTokenEntity $token )
     {
-        $this->getConnection()->table('oauth_access_tokens')
-        ->where('oauth_access_tokens.id', $token->getId())
-        ->delete();
+        // MongoDB
+
+        if( !$accessToken = OauthAccessTokensModel::where( 'id', '=', $token->getId() )->first()
+            OR !$accessToken->delete()
+            ):
+            return FALSE;
+        endif;
+
+        return TRUE;
+
+
+        // $this->getConnection()->table('oauth_access_tokens')
+        // ->where('oauth_access_tokens.id', $token->getId())
+        // ->delete();
     }
 }

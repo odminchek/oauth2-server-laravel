@@ -19,6 +19,7 @@ use League\OAuth2\Server\Storage\ClientInterface;
 
 use App\OauthClientsModel;
 use App\OauthClientEndpointsModel;
+use App\OauthSessionsModel;
 
 /**
  * This is the fluent client class.
@@ -76,7 +77,7 @@ class FluentClient extends AbstractFluentAdapter implements ClientInterface
      *
      * @return null|\League\OAuth2\Server\Entity\ClientEntity
      */
-    public function get($clientId, $clientSecret = null, $redirectUri = null, $grantType = null)
+    public function get( $clientId, $clientSecret = null, $redirectUri = null, $grantType = null )
     {
         // using MongoDB
 
@@ -125,11 +126,7 @@ class FluentClient extends AbstractFluentAdapter implements ClientInterface
         endif;
 
         if ( $this->limitClientsToGrants === TRUE && !is_null( $grantType ) ):
-            /* пока просто оставим так. ближе к делу разберёмся с правами */
-            /*
-                нам надо понять какие у нас будут права доступа
-                и в соответствии с этим их брать из базы и возвращать
-            */
+            //
         endif;
 
         return $this->hydrateEntity( $result );
@@ -191,8 +188,24 @@ class FluentClient extends AbstractFluentAdapter implements ClientInterface
      *
      * @return null|\League\OAuth2\Server\Entity\ClientEntity
      */
-    public function getBySession(SessionEntity $session)
+    public function getBySession( SessionEntity $session )
     {
+        // using MongoDB
+
+        // if( !$oauthSession = OauthSessionsModel::where( 'id', '=', $session->getId() ) 
+        //     OR !isset( $oauthSession->client_id )
+        //     ):
+        //     return FALSE;
+        // endif;
+
+        // if( !$oauthClient = OauthClientsModel::where( 'id', '=', $oauthSession->client_id )->first() 
+        //     OR !isset( $oauthClient->id )
+        //     OR !isset( $oauthClient->secret )
+        //     OR !isset( $oauthClient->name )
+        //     ):
+        //     return FALSE;
+        // endif;
+
         $result = $this->getConnection()->table('oauth_clients')
                 ->select(
                     'oauth_clients.id as id',
