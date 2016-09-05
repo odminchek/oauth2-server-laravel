@@ -160,12 +160,25 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      */
     public function associateScope( AccessTokenEntity $token, ScopeEntity $scope )
     {
-        $this->getConnection()->table('oauth_access_token_scopes')->insert([
-            'access_token_id' => $token->getId(),
-            'scope_id' => $scope->getId(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        $accessToken = new OauthAccessTokenScopesModel;
+
+        $accessToken->access_token_id = $token->getId();
+        $accessToken->scope_id = $scope->getId();
+        $accessToken->created_at = Carbon::now();
+        $accessToken->updated_at = Carbon::now();
+
+        if( !$accessToken->save() ):
+            return FALSE;
+        endif;
+
+        return TRUE;
+
+        // $this->getConnection()->table('oauth_access_token_scopes')->insert([
+        //     'access_token_id' => $token->getId(),
+        //     'scope_id' => $scope->getId(),
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ]);
     }
 
     /**
