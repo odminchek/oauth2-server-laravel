@@ -17,6 +17,7 @@ use League\OAuth2\Server\Entity\ScopeEntity;
 use League\OAuth2\Server\Storage\AccessTokenInterface;
 
 use App\OauthAccessTokensModel;
+use App\OauthAccessTokenScopesModel;
 
 /**
  * This is the fluent access token class.
@@ -89,6 +90,31 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      */
     public function getScopes(AccessTokenEntity $token)
     {
+        // mongo
+
+        // if( !$scopes = OauthAccessTokenScopesModel::where( 'access_token_id', '=', $token->getId() )->get() 
+        //     OR !$scopes = $scopes->toArray()
+        //     OR !is_array( $scopes )
+        //     OR empty( $scopes )
+        //     ):
+        //     return FALSE;
+        // endif;
+
+        // foreach( $scopes as $scope ):
+        //     $scopeEntity = new ScopeEntity( $this->getServer() );
+        //     $result[] =  $scopeEntity->hydrate( [ 'id' => $scope[ 'id' ], 'description' => $scope[ 'description' ] ] );
+        // endforeach;
+
+        // if( !isset( $result )
+        //     OR !is_array( $result )
+        //     OR empty( $result )
+        //     ):
+        //     return FALSE;
+        // endif;
+
+        // return $result;
+
+
         $result = $this->getConnection()->table('oauth_access_token_scopes')
                 ->select('oauth_scopes.*')
                 ->join('oauth_scopes', 'oauth_access_token_scopes.scope_id', '=', 'oauth_scopes.id')
