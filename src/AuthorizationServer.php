@@ -3,27 +3,47 @@
 namespace Odminchek\OAuth2Server;
 
 use League\OAuth2\Server\AuthorizationServer as LeagueAuthorizationServer;
+use League\OAuth2\Server\TokenType\Bearer;
 use Odminchek\OAuth2Server\Grant\GrantTypeInterface;
+use League\OAuth2\Server\Exception;
 
 class AuthorizationServer extends LeagueAuthorizationServer
 {
-    protected $grantTypes = [];
+    protected $grantTypes = [/* 'password' */];
 
     public function __construct()
     {
         // Set Bearer as the default token type
-        // $this->setTokenType(new Bearer());
+        $this->setTokenType( new Bearer() );
 
         parent::__construct();
 
         return $this;
     }
 
+    // public function addGrantType( GrantTypeInterface $grantType, $identifier = NULL )
+    // {
+    //     if( is_null( $identifier ) ):
+    //         $identifier = $grantType->getIdentifier();
+    //     endif;
+
+    //     // Inject server into grant
+    //     $grantType->setAuthorizationServer( $this );
+
+    //     $this->grantTypes[ $identifier ] = $grantType;
+
+    //     if ( !is_null( $grantType->getResponseType() ) ):
+    //         $this->responseTypes[] = $grantType->getResponseType();
+    //     endif;
+
+    //     return $this;
+    // }
+
     public function issueAccessToken()
     {
         // получаем grant_type из JSON
         $grantType = NULL;
-        if( !$body = json_decode( $this->getRequest()->request->get('body'), TRUE)
+        if( !$body = json_decode( $this->getRequest()->request->get( 'body' ), TRUE)
             OR !isset( $body[ 'grant_type' ] )
             OR !$grantType = $body[ 'grant_type' ]
             OR is_null( $grantType )
@@ -46,5 +66,14 @@ class AuthorizationServer extends LeagueAuthorizationServer
 
         // Complete the flow
         return $this->getGrantType( $grantType )->completeFlow();
+    }
+
+    public function getGrantType( $grantType )
+    {
+        if ( isset( $this->grantTypes[ $grantType] ) ) {
+            return $this->grantTypes[ $grantType ];
+        }
+
+        throw new Exception\InvalidGrantException($grantType);
     }
 }
