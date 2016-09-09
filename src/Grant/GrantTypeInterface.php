@@ -9,7 +9,7 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
-namespace Odminchek\OAuth2Server;
+namespace Odminchek\OAuth2Server\Grant;
 
 use Odminchek\OAuth2Server\AuthorizationServer;
 
