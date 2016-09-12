@@ -144,8 +144,6 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
      */
     public function create( $token, $expireTime, $sessionId )
     {
-        die( 'here!' );
-
         // mongo
         $accessToken = new OauthAccessTokensModel;
 
