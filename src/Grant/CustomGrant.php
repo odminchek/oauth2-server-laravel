@@ -89,7 +89,7 @@ class CustomGrant extends AbstractGrant
      */
     public function completeFlow()
     {
-        die( 'odminchek' );
+        // die( 'odminchek' );
 
         // Get the required params
         $clientId = $this->server->getRequest()->request->get('client_id', $this->server->getRequest()->getUser());

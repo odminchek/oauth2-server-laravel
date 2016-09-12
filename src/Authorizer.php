@@ -11,8 +11,7 @@
 
 namespace Odminchek\OAuth2Server;
 
-// use League\OAuth2\Server\AuthorizationServer as Issuer;
-use Odminchek\OAuth2Server\AuthorizationServer as Issuer;
+use League\OAuth2\Server\AuthorizationServer as Issuer;
 use League\OAuth2\Server\Exception\AccessDeniedException;
 use League\OAuth2\Server\ResourceServer as Checker;
 use League\OAuth2\Server\TokenType\TokenTypeInterface;
