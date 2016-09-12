@@ -1,13 +1,4 @@
 <?php
-/**
- * OAuth 2.0 Password grant
- *
- * @package     league/oauth2-server
- * @author      Alex Bilbie <hello@alexbilbie.com>
- * @copyright   Copyright (c) Alex Bilbie
- * @license     http://mit-license.org/
- * @link        https://github.com/thephpleague/oauth2-server
- */
 
 namespace Odminchek\OAuth2Server\Grant;
 
@@ -18,6 +9,9 @@ use League\OAuth2\Server\Entity\SessionEntity;
 use League\OAuth2\Server\Event;
 use League\OAuth2\Server\Exception;
 use League\OAuth2\Server\Util\SecureKey;
+
+// added by me
+use League\OAuth2\Server\Grant\AbstractGrant;
 
 /**
  * Password grant class
