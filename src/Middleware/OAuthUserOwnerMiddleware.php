@@ -15,6 +15,10 @@ use Closure;
 use League\OAuth2\Server\Exception\AccessDeniedException;
 use Odminchek\OAuth2Server\Authorizer;
 
+use App\OauthSessionsModel;
+use App\OauthAccessTokensModel;
+use App\UserModel;
+
 /**
  * This is the oauth user middleware class.
  *
@@ -49,14 +53,26 @@ class OAuthUserOwnerMiddleware
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle( $request, Closure $next )
     {
-        $this->authorizer->setRequest($request);
-
-        if ($this->authorizer->getResourceOwnerType() !== 'user') {
+        if( !$body = json_decode( $request->get( 'body' ), TRUE )
+            OR !is_array( $body )
+            OR !count( $body )
+            OR !isset( $body[ 'access_token' ] )
+            OR !$accessToken = OauthAccessTokensModel::where( 'id', '=', $body[ 'access_token' ] )->first()
+            OR !isset( $accessToken->expire_time )
+            OR time() > $accessToken->expire_time
+            OR !isset( $accessToken->session_id )
+            OR !$session = OauthSessionsModel::find( $accessToken->session_id )
+            OR !isset( $session->owner_type )
+            OR $session->owner_type !== 'user'
+            OR !isset( $session->owner_id )
+            OR !ctype_xdigit( $session->owner_id )
+            OR !$user = UserModel::find( $session->owner_id )
+            ):
             throw new AccessDeniedException();
-        }
+        endif;
 
-        return $next($request);
+        return $next( $request );
     }
 }
