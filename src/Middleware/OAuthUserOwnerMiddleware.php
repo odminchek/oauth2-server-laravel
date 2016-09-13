@@ -72,6 +72,7 @@ class OAuthUserOwnerMiddleware
             OR $body[ 'user_id' ] !== $sess->owner_id
             OR !$user = UserModel::find( $sess->owner_id )
             ):
+
             throw new AccessDeniedException();
         endif;
 
