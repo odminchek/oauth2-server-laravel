@@ -63,12 +63,14 @@ class OAuthUserOwnerMiddleware
             OR !isset( $accessToken->expire_time )
             OR time() > $accessToken->expire_time
             OR !isset( $accessToken->session_id )
-            OR !$session = OauthSessionsModel::find( $accessToken->session_id )
-            OR !isset( $session->owner_type )
-            OR $session->owner_type !== 'user'
-            OR !isset( $session->owner_id )
-            OR !ctype_xdigit( $session->owner_id )
-            OR !$user = UserModel::find( $session->owner_id )
+            OR !$sess = OauthSessionsModel::find( $accessToken->session_id )
+            OR !isset( $sess->owner_type )
+            OR $sess->owner_type !== 'user'
+            OR !isset( $sess->owner_id )
+            OR !ctype_xdigit( $sess->owner_id )
+            OR !isset( $body[ 'user_id' ] )
+            OR $body[ 'user_id' ] !== $sess->owner_id
+            OR !$user = UserModel::find( $sess->owner_id )
             ):
             throw new AccessDeniedException();
         endif;
