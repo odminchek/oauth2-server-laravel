@@ -99,7 +99,7 @@ class Authorizer
     public function getAccessToken()
     {
         $accessToken = $this->getChecker()->getAccessToken();
-
+        
         if (is_null($accessToken)) {
             throw new NoActiveAccessTokenException('Tried to access session data without an active access token');
         }

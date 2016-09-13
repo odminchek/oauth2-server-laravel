@@ -162,18 +162,6 @@ class FluentAccessToken extends AbstractFluentAdapter implements AccessTokenInte
         $result->setExpireTime( $accessToken->expire_time );
 
         return $result;
-
-        // $this->getConnection()->table('oauth_access_tokens')->insert([
-        //     'id' => $token,
-        //     'expire_time' => $expireTime,
-        //     'session_id' => $sessionId,
-        //     'created_at' => Carbon::now(),
-        //     'updated_at' => Carbon::now(),
-        // ]);
-
-        // return (new AccessTokenEntity($this->getServer()))
-        //        ->setId($token)
-        //        ->setExpireTime((int) $expireTime);
     }
 
     /**
