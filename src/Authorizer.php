@@ -19,6 +19,10 @@ use League\OAuth2\Server\Util\RedirectUri;
 use Odminchek\OAuth2Server\Exceptions\NoActiveAccessTokenException;
 use Symfony\Component\HttpFoundation\Request;
 
+use App\OauthSessionsModel;
+use App\OauthAccessTokensModel;
+use App\UserModel;
+
 /**
  * This is the authorizer class.
  *
@@ -114,7 +118,16 @@ class Authorizer
      */
     public function issueAccessToken()
     {
-        return $this->issuer->issueAccessToken();
+        $result = $this->issuer->issueAccessToken();
+        // добавляем user_id
+        if( $user_id = $this->getUserIdByToken( $result[ 'access_token' ] )
+            AND is_string( $user_id )
+            AND ctype_xdigit( $user_id )
+            ):
+            $result[ 'user_id' ] = $user_id;
+        endif;
+
+        return $result;
     }
 
     /**
@@ -305,5 +318,20 @@ class Authorizer
     {
         $this->issuer->setTokenType($tokenType);
         $this->checker->setTokenType($tokenType);
+    }
+
+    public function getUserIdByToken( $access_token = NULL )
+    {
+        if( is_null( $access_token ) 
+            OR !$accessToken = OauthAccessTokensModel::where( 'id', '=', $access_token )->first()
+            OR !isset( $accessToken->session_id )
+            OR !$sess = OauthSessionsModel::find( $accessToken->session_id )
+            OR !isset( $sess->owner_id )
+            OR !$user_id = $sess->owner_id
+            ):
+            return FALSE;
+        endif;
+
+        return $user_id;
     }
 }
